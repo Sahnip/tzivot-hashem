@@ -1,0 +1,182 @@
+"use client";
+
+import { useCallback, useMemo, useRef, useState, useTransition } from "react";
+import { toast } from "sonner";
+import { toggleHabitEntry } from "@/lib/actions/habit-entries";
+import {
+  formatDisplayDate,
+  getMonthLabels,
+  getYearDates,
+  isFutureDate,
+} from "@/lib/dates/habit-calendar";
+import { getNextStatus, getStatusLabel } from "@/types/habit";
+import type { HabitEntryStatus } from "@/types/database";
+import { cn } from "@/lib/utils";
+import { Spinner } from "@/components/ui/spinner";
+
+interface HabitGridProps {
+  habitId: string;
+  year: number;
+  timezone: string;
+  initialEntries: Record<string, HabitEntryStatus>;
+}
+
+function getCellClasses(status: HabitEntryStatus | null, disabled: boolean): string {
+  if (disabled) {
+    return "bg-muted/40 cursor-not-allowed opacity-50";
+  }
+
+  switch (status) {
+    case "positive":
+      return "bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500";
+    case "negative":
+      return "bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500";
+    default:
+      return "bg-muted hover:bg-muted-foreground/20";
+  }
+}
+
+export function HabitGrid({ habitId, year, timezone, initialEntries }: HabitGridProps) {
+  const dates = useMemo(() => getYearDates(year), [year]);
+  const monthLabels = useMemo(() => getMonthLabels(year), [year]);
+  const [entries, setEntries] = useState(initialEntries);
+  const [pendingDates, setPendingDates] = useState<Set<string>>(new Set());
+  const [, startTransition] = useTransition();
+  const inFlight = useRef<Set<string>>(new Set());
+
+  const handleToggle = useCallback(
+    (date: string) => {
+      if (isFutureDate(date, timezone)) return;
+      if (inFlight.current.has(date)) return;
+
+      inFlight.current.add(date);
+      setPendingDates((prev) => new Set(prev).add(date));
+
+      const previousStatus = entries[date] ?? null;
+      const optimisticStatus = getNextStatus(previousStatus);
+
+      setEntries((prev) => {
+        const next = { ...prev };
+        if (optimisticStatus === null) {
+          delete next[date];
+        } else {
+          next[date] = optimisticStatus;
+        }
+        return next;
+      });
+
+      startTransition(async () => {
+        const result = await toggleHabitEntry({ habitId, date, year });
+
+        inFlight.current.delete(date);
+        setPendingDates((prev) => {
+          const next = new Set(prev);
+          next.delete(date);
+          return next;
+        });
+
+        if (!result.success) {
+          setEntries((prev) => {
+            const next = { ...prev };
+            if (previousStatus === null) {
+              delete next[date];
+            } else {
+              next[date] = previousStatus;
+            }
+            return next;
+          });
+          toast.error(result.error);
+          return;
+        }
+
+        setEntries((prev) => {
+          const next = { ...prev };
+          if (result.data.status === null) {
+            delete next[date];
+          } else {
+            next[date] = result.data.status;
+          }
+          return next;
+        });
+      });
+    },
+    [entries, habitId, timezone, year]
+  );
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap gap-4 text-xs text-muted-foreground" role="list" aria-label="Légende">
+        <span className="flex items-center gap-1.5" role="listitem">
+          <span className="h-3 w-3 rounded-sm bg-muted" aria-hidden="true" />
+          Gris : non renseigné
+        </span>
+        <span className="flex items-center gap-1.5" role="listitem">
+          <span className="h-3 w-3 rounded-sm bg-emerald-500" aria-hidden="true" />
+          Vert : validation positive
+        </span>
+        <span className="flex items-center gap-1.5" role="listitem">
+          <span className="h-3 w-3 rounded-sm bg-red-500" aria-hidden="true" />
+          Rouge : validation négative
+        </span>
+      </div>
+
+      <div className="overflow-x-auto pb-2">
+        <div className="min-w-[720px]">
+          <div className="relative mb-1 flex h-4">
+            {monthLabels.map(({ month, label, startIndex }) => (
+              <span
+                key={`${month}-${startIndex}`}
+                className="absolute text-[10px] text-muted-foreground"
+                style={{ left: `${(startIndex / dates.length) * 100}%` }}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+
+          <div
+            className="grid gap-[2px]"
+            style={{ gridTemplateColumns: `repeat(${dates.length}, minmax(0, 1fr))` }}
+            role="grid"
+            aria-label={`Grille de suivi ${year}`}
+          >
+            {dates.map((date) => {
+              const status = entries[date] ?? null;
+              const isFuture = isFutureDate(date, timezone);
+              const isPending = pendingDates.has(date);
+              const label = `${formatDisplayDate(date)}, ${getStatusLabel(status)}`;
+
+              return (
+                <button
+                  key={date}
+                  type="button"
+                  disabled={isFuture || isPending}
+                  title={label}
+                  aria-label={label}
+                  aria-pressed={status !== null}
+                  onClick={() => handleToggle(date)}
+                  className={cn(
+                    "aspect-square min-h-[10px] min-w-[10px] rounded-[2px] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+                    getCellClasses(status, isFuture),
+                    isPending && "opacity-70"
+                  )}
+                >
+                  {isPending && (
+                    <span className="sr-only">Enregistrement en cours</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {pendingDates.size > 0 && (
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Spinner className="h-3 w-3" />
+          Enregistrement…
+        </div>
+      )}
+    </div>
+  );
+}
