@@ -30,12 +30,24 @@ export async function createHabit(
   }
 
   const supabase = await createClient();
+  // set position to max(position)+1 for the user
+  const { data: posData } = await supabase
+    .from("habits")
+    .select("position")
+    .eq("user_id", user.id)
+    .order("position", { ascending: false })
+    .limit(1)
+    .single();
+
+  const nextPos = posData && typeof (posData as any).position === "number" ? (posData as any).position + 1 : 1;
+
   const { data, error } = await supabase
     .from("habits")
     .insert({
       user_id: user.id,
       name: parsed.data.name,
       color: parsed.data.color ?? "emerald",
+      position: nextPos,
     })
     .select()
     .single();
@@ -127,6 +139,7 @@ export async function getHabits(): Promise<ActionResult<Habit[]>> {
     .select("*")
     .eq("user_id", user.id)
     .eq("is_archived", false)
+    .order("position", { ascending: true })
     .order("created_at", { ascending: true });
 
   if (error) {
@@ -134,6 +147,34 @@ export async function getHabits(): Promise<ActionResult<Habit[]>> {
   }
 
   return { success: true, data: data ?? [] };
+}
+
+export async function reorderHabits(input: unknown): Promise<ActionResult<void>> {
+  const user = await getAuthenticatedUser();
+  if (!user) return { success: false, error: "Session expirée." };
+
+  if (!Array.isArray(input)) return { success: false, error: "Données invalides" };
+  const ids = input as string[];
+
+  const supabase = await createClient();
+
+  // perform updates in a transaction-like loop
+  for (let i = 0; i < ids.length; i++) {
+    const id = ids[i];
+    const { error } = await supabase
+      .from("habits")
+      .update({ position: i + 1 })
+      .eq("id", id)
+      .eq("user_id", user.id);
+
+    if (error) {
+      return { success: false, error: "Impossible de réordonner les habitudes." };
+    }
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath("/habits");
+  return { success: true, data: undefined };
 }
 
 export async function getHabitById(

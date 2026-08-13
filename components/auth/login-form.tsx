@@ -38,6 +38,23 @@ export function LoginForm() {
       return;
     }
 
+    // Persist session server-side so middleware can read HttpOnly cookies
+    const session = (await supabase.auth.getSession()).data.session;
+    if (session) {
+      const res = await fetch("/api/auth/set-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+        }),
+      });
+
+      // Debug log server response status
+      // eslint-disable-next-line no-console
+      console.log("/api/auth/set-session status", res.status);
+    }
+
     toast.success("Connexion réussie");
     router.push("/dashboard");
     router.refresh();

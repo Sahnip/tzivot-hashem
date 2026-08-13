@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type React from "react";
 import { Plus } from "lucide-react";
 import type { Habit, HabitEntryStatus, Profile } from "@/types/database";
 import { HabitCard } from "@/components/habits/habit-card";
 import { HabitFormDialog } from "@/components/habits/habit-form-dialog";
 import { Button } from "@/components/ui/button";
+import { Trash2, Edit3, Move } from "lucide-react";
+import { reorderHabits, deleteHabit } from "@/lib/actions/habits";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface DashboardContentProps {
@@ -25,6 +28,11 @@ export function DashboardContent({
 }: DashboardContentProps) {
   const [createOpen, setCreateOpen] = useState(false);
   const [selectedYear, setSelectedYear] = useState(year);
+  const [localHabits, setLocalHabits] = useState<Habit[]>(habits);
+  const [editMode, setEditMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
 
   function handleYearChange(newYear: number) {
     setSelectedYear(newYear);
@@ -32,6 +40,65 @@ export function DashboardContent({
     url.searchParams.set("year", String(newYear));
     window.history.replaceState({}, "", url.toString());
     window.location.reload();
+  }
+
+  useEffect(() => setLocalHabits(habits), [habits]);
+
+  async function persistOrder(newHabits: Habit[]) {
+    const ids = newHabits.map((h) => h.id);
+    await reorderHabits(ids);
+  }
+
+  async function handleBulkDelete() {
+    if (selectedIds.size === 0) return;
+    const ids = Array.from(selectedIds);
+    await Promise.all(ids.map((id) => deleteHabit({ id })));
+    // refresh local list
+    setLocalHabits((prev) => prev.filter((h) => !selectedIds.has(h.id)));
+    setSelectedIds(new Set());
+  }
+
+  function toggleSelect(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function onDragStart(e: React.DragEvent, id: string) {
+    setDraggingId(id);
+    e.dataTransfer.setData("text/plain", id);
+    e.dataTransfer.effectAllowed = "move";
+  }
+
+  function onDragOver(e: React.DragEvent, id: string) {
+    e.preventDefault();
+    if (id === draggingId) return;
+    setOverId(id);
+  }
+
+  async function onDrop(e: React.DragEvent, id: string) {
+    e.preventDefault();
+    const draggedId = draggingId ?? e.dataTransfer.getData("text/plain");
+    if (!draggedId) return;
+    const fromIndex = localHabits.findIndex((h) => h.id === draggedId);
+    const toIndex = localHabits.findIndex((h) => h.id === id);
+    if (fromIndex === -1 || toIndex === -1) return;
+
+    const next = [...localHabits];
+    const [moved] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+    setLocalHabits(next);
+    setDraggingId(null);
+    setOverId(null);
+    await persistOrder(next);
+  }
+
+  function onDragEnd() {
+    setDraggingId(null);
+    setOverId(null);
   }
 
   return (
@@ -63,6 +130,10 @@ export function DashboardContent({
             <Plus className="h-4 w-4" aria-hidden="true" />
             Ajouter une habitude
           </Button>
+          <Button variant={editMode ? "secondary" : "ghost"} onClick={() => setEditMode((s) => !s)}>
+            <Edit3 className="h-4 w-4 mr-2" />
+            {editMode ? "Quitter le mode édition" : "Modifier l'ordre / actions"}
+          </Button>
         </div>
       </div>
 
@@ -79,14 +150,43 @@ export function DashboardContent({
         </Card>
       ) : (
         <div className="space-y-6">
-          {habits.map((habit) => (
-            <HabitCard
+          {editMode && (
+            <div className="flex items-center gap-2">
+              <Button variant="destructive" onClick={handleBulkDelete}>
+                <Trash2 className="h-4 w-4 mr-2" />Supprimer la sélection
+              </Button>
+              <div className="text-sm text-muted-foreground">Glissez-déposez pour réordonner</div>
+            </div>
+          )}
+
+          {localHabits.map((habit) => (
+            <div
               key={habit.id}
-              habit={habit}
-              year={selectedYear}
-              timezone={profile.timezone}
-              entries={entriesByHabit[habit.id] ?? {}}
-            />
+              draggable={editMode}
+              onDragStart={(e) => onDragStart(e, habit.id)}
+              onDragOver={(e) => onDragOver(e, habit.id)}
+              onDrop={(e) => onDrop(e, habit.id)}
+              onDragEnd={onDragEnd}
+              className={"rounded-md"}
+            >
+              {editMode && (
+                <div className="flex items-center gap-2 p-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.has(habit.id)}
+                    onChange={() => toggleSelect(habit.id)}
+                  />
+                  <Move className="h-4 w-4 text-muted-foreground" />
+                </div>
+              )}
+              <HabitCard
+                habit={habit}
+                year={selectedYear}
+                timezone={profile.timezone}
+                entries={entriesByHabit[habit.id] ?? {}}
+                onUpdate={() => { /* no-op: server actions revalidate */ }}
+              />
+            </div>
           ))}
         </div>
       )}
