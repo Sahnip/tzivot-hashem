@@ -52,7 +52,7 @@ export function RegisterForm() {
       toast.success(
         "Compte créé. Vérifiez votre e-mail pour confirmer votre inscription."
       );
-      router.push("/login");
+      router.push(`/email-confirmation?email=${encodeURIComponent(values.email)}`);
       return;
     }
 
