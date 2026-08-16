@@ -26,7 +26,7 @@ export function LoginForm() {
     setIsSubmitting(true);
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: values.email,
       password: values.password,
     });
@@ -38,25 +38,28 @@ export function LoginForm() {
       return;
     }
 
-    // Persist session server-side so middleware can read HttpOnly cookies
-    const session = (await supabase.auth.getSession()).data.session;
-    if (session) {
-      const res = await fetch("/api/auth/set-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          access_token: session.access_token,
-          refresh_token: session.refresh_token,
-        }),
-      });
+    const session = data.session ?? (await supabase.auth.getSession()).data.session;
+    if (!session?.access_token || !session.refresh_token) {
+      toast.error("La session n’a pas pu être créée. Veuillez réessayer.");
+      return;
+    }
 
-      // Debug log server response status
-      // eslint-disable-next-line no-console
-      console.log("/api/auth/set-session status", res.status);
+    const res = await fetch("/api/auth/set-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+      }),
+    });
+
+    if (!res.ok) {
+      toast.error("La session n’a pas pu être enregistrée. Veuillez réessayer.");
+      return;
     }
 
     toast.success("Connexion réussie");
-    router.push("/dashboard");
+    router.replace("/dashboard");
     router.refresh();
   }
 

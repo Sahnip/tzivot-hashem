@@ -39,7 +39,7 @@ export async function createHabit(
     .limit(1)
     .single();
 
-  const nextPos = posData && typeof (posData as any).position === "number" ? (posData as any).position + 1 : 1;
+  const nextPos = typeof posData?.position === "number" ? posData.position + 1 : 1;
 
   const { data, error } = await supabase
     .from("habits")

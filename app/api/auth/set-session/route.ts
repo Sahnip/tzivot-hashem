@@ -15,11 +15,23 @@ async function parseCookies(header: string | null) {
 }
 
 export async function POST(request: Request) {
-  const body = await request.json();
+  let body: Partial<{ access_token: string; refresh_token: string }> = {};
 
-  // Create a mutable NextResponse to collect cookies set by Supabase helper
-  let res = NextResponse.next();
-  const cookiesSet: string[] = [];
+  try {
+    body = await request.json();
+  } catch {
+    body = {};
+  }
+
+  const { access_token, refresh_token } = body;
+  if (!access_token || !refresh_token) {
+    return NextResponse.json(
+      { success: false, error: "Tokens de session manquants." },
+      { status: 400 }
+    );
+  }
+
+  const setCookies: Array<{ name: string; value: string; options?: Record<string, unknown> }> = [];
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -31,25 +43,30 @@ export async function POST(request: Request) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => {
-            // NextResponse exposes a cookies helper
-            res.cookies.set(name, value, options);
-            cookiesSet.push(name);
+            setCookies.push({ name, value, options });
           });
         },
       },
     }
   );
 
-  // Set the session using tokens from the client
   try {
-    await supabase.auth.setSession({
-      access_token: body.access_token,
-      refresh_token: body.refresh_token,
-    });
+    const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+    if (error) {
+      return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+    }
   } catch (err) {
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 
-  // Return which cookie names were set for debugging (no token values)
-  return NextResponse.json({ success: true, cookies: cookiesSet }, { status: 200 });
+  const response = NextResponse.json(
+    { success: true, cookies: setCookies.map(({ name }) => name) },
+    { status: 200 }
+  );
+
+  setCookies.forEach(({ name, value, options }) => {
+    response.cookies.set(name, value, options as any);
+  });
+
+  return response;
 }

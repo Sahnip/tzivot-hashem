@@ -43,6 +43,7 @@ export interface Database {
           user_id: string;
           name: string;
           color: string | null;
+          position: number;
           is_archived: boolean;
           created_at: string;
           updated_at: string;
@@ -52,6 +53,7 @@ export interface Database {
           user_id: string;
           name: string;
           color?: string | null;
+          position?: number;
           is_archived?: boolean;
           created_at?: string;
           updated_at?: string;
@@ -61,6 +63,7 @@ export interface Database {
           user_id?: string;
           name?: string;
           color?: string | null;
+          position?: number;
           is_archived?: boolean;
           created_at?: string;
           updated_at?: string;
