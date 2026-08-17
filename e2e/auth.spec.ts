@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Public pages", () => {
   test("home page loads", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { name: "HabitTrack" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Machiah Now" })).toBeVisible();
   });
 
   test("login page loads", async ({ page }) => {

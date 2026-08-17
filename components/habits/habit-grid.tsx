@@ -131,7 +131,7 @@ export function HabitGrid({ habitId, year, timezone, initialEntries }: HabitGrid
           </div>
 
           <div
-            className="grid auto-cols-max grid-flow-col gap-[1px]"
+            className="grid auto-cols-max grid-flow-col gap-[3px]"
             role="grid"
             aria-label={`Grille de suivi ${year}`}
           >
@@ -139,7 +139,7 @@ export function HabitGrid({ habitId, year, timezone, initialEntries }: HabitGrid
               const weekDates = dates.slice(weekIndex * 7, weekIndex * 7 + 7);
 
               return (
-                <div key={`week-${weekIndex}`} className="grid grid-rows-7 gap-[1px]">
+                <div key={`week-${weekIndex}`} className="grid grid-rows-7 gap-[3px]">
                   {weekDates.map((date) => {
                     const status = entries[date] ?? null;
                     const isFuture = isFutureDate(date, timezone);
@@ -156,7 +156,7 @@ export function HabitGrid({ habitId, year, timezone, initialEntries }: HabitGrid
                         aria-pressed={status !== null}
                         onClick={() => handleToggle(date)}
                         className={cn(
-                          "h-3 w-3 min-h-3 min-w-3 rounded-[2px] border border-transparent transition-all duration-400 ease-out hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+                          "h-3 w-3 min-h-3 min-w-3 rounded-[3px] border border-transparent transition-all duration-400 ease-out hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
                           getCellClasses(status, isFuture),
                           isPending && "opacity-70"
                         )}

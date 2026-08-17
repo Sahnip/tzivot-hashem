@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "1% du monde — Suivi d'habitudes",
+  title: "Machiah est devant toi, suivre tes habitudes permet de marcher sur le chemin de menant à la vision du Machiah, l'extrême bonté divine — Suivi d'habitudes",
   description: "Application simple et sécurisée de suivi d'habitudes personnelles",
 };
 
