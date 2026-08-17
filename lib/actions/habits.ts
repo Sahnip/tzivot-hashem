@@ -136,6 +136,36 @@ export async function getHabits(): Promise<ActionResult<Habit[]>> {
   return { success: true, data: data ?? [] };
 }
 
+export async function reorderHabits(input: string[]): Promise<ActionResult<void>> {
+  const user = await getAuthenticatedUser();
+  if (!user) {
+    return { success: false, error: "Session expirée. Veuillez vous reconnecter." };
+  }
+
+  if (!Array.isArray(input) || input.length === 0) {
+    return { success: false, error: "Données invalides." };
+  }
+
+  const supabase = await createClient();
+
+  for (let index = 0; index < input.length; index += 1) {
+    const habitId = input[index];
+    const { error } = await supabase
+      .from("habits")
+      .update({ position: index + 1 })
+      .eq("id", habitId)
+      .eq("user_id", user.id);
+
+    if (error) {
+      return { success: false, error: "Impossible de réordonner les habitudes." };
+    }
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath("/habits");
+  return { success: true, data: undefined };
+}
+
 export async function getHabitById(
   id: string
 ): Promise<ActionResult<Habit>> {

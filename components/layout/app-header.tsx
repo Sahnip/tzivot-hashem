@@ -10,7 +10,7 @@ export function AppHeader() {
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
             <Target className="h-5 w-5 text-primary" aria-hidden="true" />
-            <span>HabitTrack</span>
+            <span>1% du monde</span>
           </Link>
           <nav className="hidden items-center gap-4 sm:flex" aria-label="Navigation principale">
             <Link

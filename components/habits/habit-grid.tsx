@@ -23,16 +23,16 @@ interface HabitGridProps {
 
 function getCellClasses(status: HabitEntryStatus | null, disabled: boolean): string {
   if (disabled) {
-    return "bg-muted/40 cursor-not-allowed opacity-50";
+    return "bg-muted/40 cursor-not-allowed opacity-50 border-transparent";
   }
 
   switch (status) {
     case "positive":
-      return "bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500";
+      return "bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500 border-transparent";
     case "negative":
-      return "bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500";
+      return "bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 border-transparent";
     default:
-      return "bg-muted hover:bg-muted-foreground/20";
+      return "bg-muted hover:bg-muted-foreground/20 border border-muted-foreground/20";
   }
 }
 
@@ -121,50 +121,53 @@ export function HabitGrid({ habitId, year, timezone, initialEntries }: HabitGrid
       </div>
 
       <div className="overflow-x-auto pb-2">
-        <div className="min-w-[720px]">
-          <div className="relative mb-1 flex h-4">
-            {monthLabels.map(({ month, label, startIndex }) => (
-              <span
-                key={`${month}-${startIndex}`}
-                className="absolute text-[10px] text-muted-foreground"
-                style={{ left: `${(startIndex / dates.length) * 100}%` }}
-              >
+        <div className="min-w-[220px]">
+          <div className="mb-2 grid grid-cols-12 gap-1 text-[10px] text-muted-foreground">
+            {monthLabels.map(({ month, label }) => (
+              <span key={`${month}-${label}`} className="truncate text-center">
                 {label}
               </span>
             ))}
           </div>
 
           <div
-            className="grid gap-[2px]"
-            style={{ gridTemplateColumns: `repeat(${dates.length}, minmax(0, 1fr))` }}
+            className="grid auto-cols-max grid-flow-col gap-[1px]"
             role="grid"
             aria-label={`Grille de suivi ${year}`}
           >
-            {dates.map((date) => {
-              const status = entries[date] ?? null;
-              const isFuture = isFutureDate(date, timezone);
-              const isPending = pendingDates.has(date);
-              const label = `${formatDisplayDate(date)}, ${getStatusLabel(status)}`;
+            {Array.from({ length: Math.ceil(dates.length / 7) }, (_, weekIndex) => {
+              const weekDates = dates.slice(weekIndex * 7, weekIndex * 7 + 7);
 
               return (
-                <button
-                  key={date}
-                  type="button"
-                  disabled={isFuture || isPending}
-                  title={label}
-                  aria-label={label}
-                  aria-pressed={status !== null}
-                  onClick={() => handleToggle(date)}
-                  className={cn(
-                    "aspect-square min-h-[10px] min-w-[10px] rounded-[2px] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
-                    getCellClasses(status, isFuture),
-                    isPending && "opacity-70"
-                  )}
-                >
-                  {isPending && (
-                    <span className="sr-only">Enregistrement en cours</span>
-                  )}
-                </button>
+                <div key={`week-${weekIndex}`} className="grid grid-rows-7 gap-[1px]">
+                  {weekDates.map((date) => {
+                    const status = entries[date] ?? null;
+                    const isFuture = isFutureDate(date, timezone);
+                    const isPending = pendingDates.has(date);
+                    const label = `${formatDisplayDate(date)}, ${getStatusLabel(status)}`;
+
+                    return (
+                      <button
+                        key={date}
+                        type="button"
+                        disabled={isFuture || isPending}
+                        title={label}
+                        aria-label={label}
+                        aria-pressed={status !== null}
+                        onClick={() => handleToggle(date)}
+                        className={cn(
+                          "h-3 w-3 min-h-3 min-w-3 rounded-[2px] border border-transparent transition-all duration-400 ease-out hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+                          getCellClasses(status, isFuture),
+                          isPending && "opacity-70"
+                        )}
+                      >
+                        {isPending && (
+                          <span className="sr-only">Enregistrement en cours</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               );
             })}
           </div>

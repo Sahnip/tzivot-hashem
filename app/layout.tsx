@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HabitTrack — Suivi d'habitudes",
+  title: "1% du monde — Suivi d'habitudes",
   description: "Application simple et sécurisée de suivi d'habitudes personnelles",
 };
 

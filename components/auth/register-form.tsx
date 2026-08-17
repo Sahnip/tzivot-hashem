@@ -13,9 +13,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+const oauthProviders = [
+  { provider: "google", label: "Google", icon: "G" },
+  { provider: "github", label: "GitHub", icon: "GH" },
+  { provider: "linkedin", label: "LinkedIn", icon: "in" },
+] as const;
+
 export function RegisterForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [existingAccount, setExistingAccount] = useState(false);
 
   const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -27,8 +34,23 @@ export function RegisterForm() {
     },
   });
 
+  async function handleOAuthLogin(provider: (typeof oauthProviders)[number]["provider"]) {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=%2Fdashboard`,
+      },
+    });
+
+    if (error) {
+      toast.error("Connexion impossible avec ce fournisseur.");
+    }
+  }
+
   async function onSubmit(values: RegisterInput) {
     setIsSubmitting(true);
+    setExistingAccount(false);
     const supabase = createClient();
 
     const { data, error } = await supabase.auth.signUp({
@@ -44,6 +66,20 @@ export function RegisterForm() {
     setIsSubmitting(false);
 
     if (error) {
+      const message = error.message.toLowerCase();
+      const duplicate =
+        message.includes("already") ||
+        message.includes("exists") ||
+        message.includes("registered") ||
+        message.includes("déjà") ||
+        message.includes("existe");
+
+      if (duplicate) {
+        setExistingAccount(true);
+        toast.error("Un compte existe déjà avec cette adresse e-mail. Connectez-vous.");
+        return;
+      }
+
       toast.error(error.message || "Impossible de créer le compte.");
       return;
     }
@@ -68,6 +104,35 @@ export function RegisterForm() {
         <CardDescription>Créez un compte pour commencer le suivi.</CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="mb-4 grid gap-2 sm:grid-cols-3">
+          {oauthProviders.map(({ provider, label, icon }) => (
+            <Button
+              key={provider}
+              type="button"
+              variant="outline"
+              className="flex items-center justify-center gap-2"
+              onClick={() => handleOAuthLogin(provider)}
+            >
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted text-xs font-bold">
+                {icon}
+              </span>
+              {label}
+            </Button>
+          ))}
+        </div>
+
+        <div className="mb-4 flex items-center gap-2 text-xs text-muted-foreground">
+          <div className="h-px flex-1 bg-border" />
+          <span>ou</span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+
+        {existingAccount && (
+          <div className="mb-4 rounded-md border border-amber-500/50 bg-amber-500/10 p-3 text-sm text-amber-900 dark:text-amber-100">
+            Un compte existe déjà avec cette adresse e-mail. Cliquez sur <Link href="/login" className="font-semibold underline">Se connecter</Link> pour accéder à votre espace.
+          </div>
+        )}
+
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="displayName">Nom d&apos;affichage (facultatif)</Label>
