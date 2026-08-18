@@ -76,7 +76,7 @@ export function HabitFormDialog({
 
   return (
     <LiquidGlassSurface >
-        <Dialog open={open} onOpenChange={onOpenChange} className="glass">
+        <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{isEditing ? "Modifier l'habitude" : "Nouvelle habitude"}</DialogTitle>
