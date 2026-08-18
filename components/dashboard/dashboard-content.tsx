@@ -119,7 +119,7 @@ export function DashboardContent({
             id="year-select"
             value={selectedYear}
             onChange={(e) => handleYearChange(Number(e.target.value))}
-            className="h-10 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-10 rounded-md border border-input cursor-pointer bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {availableYears.map((y) => (
               <option key={y} value={y}>
@@ -127,11 +127,11 @@ export function DashboardContent({
               </option>
             ))}
           </select>
-          <Button onClick={() => setCreateOpen(true)}>
+          <Button onClick={() => setCreateOpen(true)} className="cursor-pointer">
             <Plus className="h-4 w-4" aria-hidden="true" />
             Ajouter une habitude
           </Button>
-          <Button variant={editMode ? "secondary" : "ghost"} onClick={() => setEditMode((value) => !value)}>
+          <Button variant={editMode ? "secondary" : "ghost"} onClick={() => setEditMode((value) => !value)} className="cursor-pointer">
             <Edit3 className="mr-2 h-4 w-4" />
             {editMode ? "Quitter le mode édition" : "Modifier l'ordre / actions"}
           </Button>
@@ -153,7 +153,7 @@ export function DashboardContent({
         <div className="space-y-6">
           {editMode && (
             <div className="flex items-center gap-2">
-              <Button variant="destructive" onClick={handleBulkDelete}>
+              <Button variant="destructive" onClick={handleBulkDelete} className="cursor-pointer">
                 <Trash2 className="mr-2 h-4 w-4" />
                 Supprimer la sélection
               </Button>
@@ -181,6 +181,7 @@ export function DashboardContent({
                     type="checkbox"
                     checked={selectedIds.has(habit.id)}
                     onChange={() => toggleSelect(habit.id)}
+                    className="cursor-pointer"
                   />
                   <Move className="h-4 w-4" />
                   <span>Déplacer cette habitude</span>

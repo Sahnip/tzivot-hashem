@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { connection } from 'next/server'
 
-export default function HomePage() {
+export default async function HomePage() {
+  await connection()
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-4">
       <div className="mx-auto max-w-lg text-center">

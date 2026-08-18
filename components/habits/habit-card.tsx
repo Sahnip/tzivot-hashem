@@ -67,6 +67,7 @@ export function HabitCard({ habit, year, timezone, entries, onUpdate }: HabitCar
               size="icon"
               onClick={() => setEditOpen(true)}
               aria-label={`Modifier ${habit.name}`}
+              className="cursor-pointer"
             >
               <Pencil className="h-4 w-4" />
             </Button>
@@ -75,6 +76,7 @@ export function HabitCard({ habit, year, timezone, entries, onUpdate }: HabitCar
               size="icon"
               onClick={() => setDeleteOpen(true)}
               aria-label={`Supprimer ${habit.name}`}
+              className="cursor-pointer"
             >
               <Trash2 className="h-4 w-4 text-destructive" />
             </Button>

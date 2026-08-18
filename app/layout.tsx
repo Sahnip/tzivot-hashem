@@ -16,9 +16,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Machiah est devant toi, suivre tes habitudes permet de marcher sur le chemin de menant à la vision du Machiah, l'extrême bonté divine — Suivi d'habitudes",
-  description: "Application simple et sécurisée de suivi d'habitudes personnelles",
+  title: "Tsivot Hachem — Suivi d'habitudes",
+  description: "Machiah est devant toi, suivre tes habitudes permet de marcher sur le chemin d'atteinte à la vision du Machiah, l'extrême bonté divine, avec cette appli simple d'utlisation, tu eux réaliser des choses extrêment grandes sur la durée.",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon-180x180.png",
+  },
+  // themeColor: "#ffffff",
 };
+
+export const dynamic = 'force-dynamic'
 
 export default function RootLayout({
   children,
