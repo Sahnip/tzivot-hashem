@@ -120,7 +120,7 @@ return (
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <div className="glass">
+        <div className="glass flex items-start gap-1 sm:flex-row sm:items-center">
           <label htmlFor="year-select" className="text-sm text-muted-foreground">
             Année
           </label>
@@ -128,7 +128,7 @@ return (
             id="year-select"
             value={selectedYear}
             onChange={(e) => handleYearChange(Number(e.target.value))}
-            className=" h-10 rounded-md border border-input cursor-pointer bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border-0 "
+            className="h-10 rounded-md border-input cursor-pointer bg-background px-3 text-sm focus-visible:outline-none  border-0 "
           >
             {availableYears.map((y) => (
               <option key={y} value={y}>
