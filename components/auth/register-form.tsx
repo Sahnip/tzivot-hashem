@@ -110,7 +110,7 @@ export function RegisterForm() {
               key={provider}
               type="button"
               variant="outline"
-              className="flex items-center justify-center gap-2"
+              className="glass flex items-center justify-center gap-2"
               onClick={() => handleOAuthLogin(provider)}
             >
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted text-xs font-bold">
@@ -136,7 +136,16 @@ export function RegisterForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="displayName">Nom d&apos;affichage (facultatif)</Label>
-            <Input id="displayName" autoComplete="name" {...form.register("displayName")} />
+            <Input 
+              id="displayName" 
+              autoComplete="name" {...form.register("displayName")}
+              className="glass"
+              aria-invalid={!!form.formState.errors.displayName}
+              aria-describedby="displayName-error"
+            />
+            <p id="displayName-error" className="text-sm text-destructive" role="alert">
+              {form.formState.errors.displayName?.message}
+            </p>
           </div>
 
           <div className="space-y-2">
@@ -147,6 +156,9 @@ export function RegisterForm() {
               autoComplete="email"
               {...form.register("email")}
               aria-invalid={!!form.formState.errors.email}
+              aria-describedby="email-error"
+              className="glass"
+              required
             />
             {form.formState.errors.email && (
               <p className="text-sm text-destructive" role="alert">
@@ -163,6 +175,9 @@ export function RegisterForm() {
               autoComplete="new-password"
               {...form.register("password")}
               aria-invalid={!!form.formState.errors.password}
+              className="glass"
+              required
+              aria-describedby="password-error"
             />
             {form.formState.errors.password && (
               <p className="text-sm text-destructive" role="alert">
@@ -179,6 +194,9 @@ export function RegisterForm() {
               autoComplete="new-password"
               {...form.register("confirmPassword")}
               aria-invalid={!!form.formState.errors.confirmPassword}
+              aria-describedby="confirmPassword-error"
+              className="glass"
+              required
             />
             {form.formState.errors.confirmPassword && (
               <p className="text-sm text-destructive" role="alert">
@@ -187,7 +205,7 @@ export function RegisterForm() {
             )}
           </div>
 
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button type="submit" className="glass w-full" disabled={isSubmitting}>
             {isSubmitting ? "Création…" : "Créer mon compte"}
           </Button>
         </form>

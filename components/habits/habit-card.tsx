@@ -64,19 +64,19 @@ export function HabitCard({ habit, year, timezone, entries, onUpdate }: HabitCar
           <div className="flex shrink-0 gap-1">
             <Button
               variant="ghost"
-              size="icon"
+              // size="icon"
               onClick={() => setEditOpen(true)}
               aria-label={`Modifier ${habit.name}`}
-              className="cursor-pointer"
+              className="glass cursor-pointer"
             >
               <Pencil className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"
-              size="icon"
+              // size="icon"
               onClick={() => setDeleteOpen(true)}
               aria-label={`Supprimer ${habit.name}`}
-              className="cursor-pointer"
+              className="glass cursor-pointer"
             >
               <Trash2 className="h-4 w-4 text-destructive" />
             </Button>

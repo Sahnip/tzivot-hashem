@@ -5,31 +5,36 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 export function AppHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    // <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      {/* <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6"> */}
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ">
           <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
             <img
               src="/logo.svg"
               alt="Logo"
-              className="h-22 w-22"
+              className="h-22 w-22 "
             />
             <div className="flex flex-col">
               <span>Armée du Roi</span>
               <span className="text-[10px] text-muted-foreground">Machiah est devant toi</span>
             </div>
           </Link>
-          <nav className="hidden items-center gap-4 sm:flex" aria-label="Navigation principale">
+          {/* <nav className="hidden items-center gap-4 sm:flex" aria-label="Navigation principale"> */}
+          <nav className="glass-nav px-6 py-4" aria-label="Navigation principale">
             <Link
               href="/dashboard"
-              className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              // className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="glass"
             >
               <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
               Tableau de bord
             </Link>
             <Link
               href="/profile"
-              className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              // className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="glass"
             >
               <User className="h-4 w-4" aria-hidden="true" />
               Profil
@@ -40,6 +45,7 @@ export function AppHeader() {
           <ThemeToggle />
           <SignOutButton variant="ghost" size="sm">
             <LogOut className="h-4 w-4" aria-hidden="true" />
+            {/* <span className="hidden sm:inline">Déconnexion</span> */}
             <span className="hidden sm:inline">Déconnexion</span>
           </SignOutButton>
         </div>

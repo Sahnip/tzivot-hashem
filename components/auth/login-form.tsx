@@ -76,8 +76,9 @@ export function LoginForm() {
               key={provider}
               type="button"
               variant="outline"
-              className="flex items-center justify-center gap-2"
+              className="glass flex items-center justify-center gap-2"
               onClick={() => handleOAuthLogin(provider)}
+              autoFocus
             >
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted text-xs font-bold">
                 {icon}
@@ -102,6 +103,9 @@ export function LoginForm() {
               autoComplete="email"
               {...form.register("email")}
               aria-invalid={!!form.formState.errors.email}
+              autoFocus
+              required
+              className="glass"
             />
             {form.formState.errors.email && (
               <p className="text-sm text-destructive" role="alert">
@@ -118,6 +122,9 @@ export function LoginForm() {
               autoComplete="current-password"
               {...form.register("password")}
               aria-invalid={!!form.formState.errors.password}
+              autoFocus
+              required
+              className="glass"
             />
             {form.formState.errors.password && (
               <p className="text-sm text-destructive" role="alert">
@@ -132,7 +139,7 @@ export function LoginForm() {
             </Link>
           </div>
 
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button type="submit" className="glass w-full" disabled={isSubmitting}>
             {isSubmitting ? "Connexion…" : "Se connecter"}
           </Button>
         </form>

@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { Target } from "lucide-react";
+// import { Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { connection } from 'next/server'
+// import App from '@/components/App'
 
 export default async function HomePage() {
   await connection()
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-4">
+    <main className="flex min-h-screen p-8 flex-col items-center justify-center px-4">
       <div className="mx-auto max-w-lg text-center">
         <div className="mb-6 flex justify-center">
           {/* <Target className="h-12 w-12 text-primary" aria-hidden="true" /> */}
@@ -26,6 +27,7 @@ export default async function HomePage() {
           </Button>
         </div>
       </div>
+      {/* <App /> */}
     </main>
   );
 }
