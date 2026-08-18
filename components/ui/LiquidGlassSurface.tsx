@@ -44,7 +44,7 @@ export const LiquidGlassSurface = React.forwardRef<
         }
       }}
       onMouseMove={handleMouseMove}
-      className={`liquid-glass-surface ${className}`}
+      className={`liquid-glass-parent ${className}`}
       {...props}
     >
       {children}
@@ -52,7 +52,7 @@ export const LiquidGlassSurface = React.forwardRef<
   );
 });
 
-LiquidGlassSurface.displayName = "LiquidGlassSurface";
+LiquidGlassSurface.displayName = "liquid-glass-parent";
 
 
 // // LiquidGlassSurface.tsx

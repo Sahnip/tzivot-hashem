@@ -158,8 +158,8 @@ export function HabitGrid({ habitId, year, timezone, initialEntries }: HabitGrid
                         className={cn(
                           "h-3 w-3 min-h-3 min-w-3 rounded-[3px] border border-transparent transition-all duration-400 ease-out hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 cursor-pointer",
                           getCellClasses(status, isFuture),
-                          isPending && "opacity-70"
-                        ) + "glass"}
+                          isPending && "opacity-50"
+                        ) + "liquid-glass"}
                       >
                         {isPending && (
                           <span className="sr-only">Enregistrement en cours</span>
@@ -176,7 +176,7 @@ export function HabitGrid({ habitId, year, timezone, initialEntries }: HabitGrid
                         aria-pressed={status !== null}
                         onClick={() => handleToggle(date)}
                         className={cn(
-                          "glass-cell h-3 w-3 min-h-3 min-w-3 rounded-[3px] border border-transparent transition-all duration-400 ease-out hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 cursor-pointer",
+                          "liquid-glass-cell h-3 w-3 min-h-3 min-w-3 rounded-[3px] border border-transparent transition-all duration-400 ease-out hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 cursor-pointer",
                           getCellClasses(status, isFuture),
                           isPending && "opacity-70"
                         )}

@@ -14,9 +14,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const oauthProviders = [
-  { provider: "google", label: "Google", icon: "G" },
-  { provider: "github", label: "GitHub", icon: "GH" },
-  { provider: "linkedin", label: "LinkedIn", icon: "in" },
+  { provider: "google", label: "Google", icon: "/google.svg" },
+  { provider: "github", label: "GitHub", icon: "/github.svg" },
+  { provider: "linkedin", label: "LinkedIn", icon: "/linkedin.svg" },
 ] as const;
 
 export function LoginForm() {
@@ -76,12 +76,14 @@ export function LoginForm() {
               key={provider}
               type="button"
               variant="outline"
-              className="glass flex items-center justify-center gap-2"
+              className="liquid-glass flex items-center justify-center gap-2"
               onClick={() => handleOAuthLogin(provider)}
               autoFocus
             >
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted text-xs font-bold">
-                {icon}
+                {icon && (
+                  <img src={icon} alt={label} className="h-full w-full object-contain" />
+                )}
               </span>
               {label}
             </Button>
@@ -95,7 +97,7 @@ export function LoginForm() {
         </div>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-2">
+          <div className="space-y-2 flex flex-col gap-1">
             <Label htmlFor="email">Adresse e-mail</Label>
             <Input
               id="email"
@@ -105,7 +107,7 @@ export function LoginForm() {
               aria-invalid={!!form.formState.errors.email}
               autoFocus
               required
-              className="glass"
+              className="liquid-glass"
             />
             {form.formState.errors.email && (
               <p className="text-sm text-destructive" role="alert">
@@ -114,7 +116,7 @@ export function LoginForm() {
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 flex flex-col gap-1">
             <Label htmlFor="password">Mot de passe</Label>
             <Input
               id="password"
@@ -124,7 +126,7 @@ export function LoginForm() {
               aria-invalid={!!form.formState.errors.password}
               autoFocus
               required
-              className="glass"
+              className="liquid-glass"
             />
             {form.formState.errors.password && (
               <p className="text-sm text-destructive" role="alert">
@@ -134,19 +136,19 @@ export function LoginForm() {
           </div>
 
           <div className="text-right">
-            <Link href="/forgot-password" className="text-sm text-primary underline-offset-4 hover:underline">
+            <Link href="/forgot-password" className="text-sm text-[#00bc7d] underline-offset-4 hover:underline">
               Mot de passe oublié ?
             </Link>
           </div>
 
-          <Button type="submit" className="glass w-full" disabled={isSubmitting}>
+          <Button type="submit" className="liquid-glass  items-center justify-center" disabled={isSubmitting}>
             {isSubmitting ? "Connexion…" : "Se connecter"}
           </Button>
         </form>
 
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Pas encore de compte ?{" "}
-          <Link href="/register" className="text-primary underline-offset-4 hover:underline">
+          <Link href="/register" className=" text-[#00bc7d] underline-offset-4 hover:underline ">
             S&apos;inscrire
           </Link>
         </p>

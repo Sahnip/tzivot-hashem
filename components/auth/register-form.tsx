@@ -14,9 +14,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const oauthProviders = [
-  { provider: "google", label: "Google", icon: "G" },
-  { provider: "github", label: "GitHub", icon: "GH" },
-  { provider: "linkedin", label: "LinkedIn", icon: "in" },
+  { provider: "google", label: "Google", icon: "/google.svg" },
+  { provider: "github", label: "GitHub", icon: "/github.svg" },
+  { provider: "linkedin", label: "LinkedIn", icon: "/linkedin.svg" },
 ] as const;
 
 export function RegisterForm() {
@@ -110,11 +110,13 @@ export function RegisterForm() {
               key={provider}
               type="button"
               variant="outline"
-              className="glass flex items-center justify-center gap-2"
+              className="liquid-glass flex items-center justify-center gap-2"
               onClick={() => handleOAuthLogin(provider)}
             >
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted text-xs font-bold">
-                {icon}
+                {icon && (
+                  <img src={icon} alt={label} className="h-full w-full object-contain" />
+                )}
               </span>
               {label}
             </Button>
@@ -134,12 +136,12 @@ export function RegisterForm() {
         )}
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-2">
+          <div className="space-y-2  flex flex-col gap-1">
             <Label htmlFor="displayName">Nom d&apos;affichage (facultatif)</Label>
             <Input 
               id="displayName" 
               autoComplete="name" {...form.register("displayName")}
-              className="glass"
+              className="liquid-glass"
               aria-invalid={!!form.formState.errors.displayName}
               aria-describedby="displayName-error"
             />
@@ -148,7 +150,7 @@ export function RegisterForm() {
             </p>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2  flex flex-col gap-1">
             <Label htmlFor="email">Adresse e-mail</Label>
             <Input
               id="email"
@@ -157,7 +159,7 @@ export function RegisterForm() {
               {...form.register("email")}
               aria-invalid={!!form.formState.errors.email}
               aria-describedby="email-error"
-              className="glass"
+              className="liquid-glass"
               required
             />
             {form.formState.errors.email && (
@@ -167,7 +169,7 @@ export function RegisterForm() {
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2  flex flex-col gap-1">
             <Label htmlFor="password">Mot de passe</Label>
             <Input
               id="password"
@@ -175,7 +177,7 @@ export function RegisterForm() {
               autoComplete="new-password"
               {...form.register("password")}
               aria-invalid={!!form.formState.errors.password}
-              className="glass"
+              className="liquid-glass"
               required
               aria-describedby="password-error"
             />
@@ -186,7 +188,7 @@ export function RegisterForm() {
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 mb-9  flex flex-col gap-1">
             <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
             <Input
               id="confirmPassword"
@@ -195,7 +197,7 @@ export function RegisterForm() {
               {...form.register("confirmPassword")}
               aria-invalid={!!form.formState.errors.confirmPassword}
               aria-describedby="confirmPassword-error"
-              className="glass"
+              className="liquid-glass"
               required
             />
             {form.formState.errors.confirmPassword && (
@@ -205,14 +207,14 @@ export function RegisterForm() {
             )}
           </div>
 
-          <Button type="submit" className="glass w-full" disabled={isSubmitting}>
+          <Button type="submit" className="liquid-glass " disabled={isSubmitting}>
             {isSubmitting ? "Création…" : "Créer mon compte"}
           </Button>
         </form>
 
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Déjà un compte ?{" "}
-          <Link href="/login" className="text-primary underline-offset-4 hover:underline">
+          <Link href="/login" className="text-[#00bc7d] underline-offset-4 hover:underline">
             Se connecter
           </Link>
         </p>

@@ -26,15 +26,47 @@ export function AppHeader() {
             <Link
               href="/dashboard"
               // className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-              className="glass"
+              className="liquid-glass
+                  h-11
+                  w-full
+                  px-4
+                  py-2
+                  text-sm
+                  font-medium
+                  text-foreground
+                  hover:text-foreground
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-ring
+                  focus:ring-offset-2
+                  focus:ring-offset-background
+                  dark:hover:text-foreground
+                  gap-2
+                  flex
+                  items-center
+                  justify-center
+                "
+              // aria-current={pathname === "/dashboard" ? "page" : undefined}
+                
             >
-              <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
+              <LayoutDashboard aria-hidden="true" />
               Tableau de bord
             </Link>
             <Link
               href="/profile"
               // className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-              className="glass"
+              className="
+                  liquid-glass
+                  h-11
+                  w-full
+                  rounded-xl
+                  py-2
+                  text-sm
+                  justify-center
+                  gap-2
+                  flex
+                  items-center
+              "
             >
               <User className="h-4 w-4" aria-hidden="true" />
               Profil

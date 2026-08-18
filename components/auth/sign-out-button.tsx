@@ -23,7 +23,7 @@ export function SignOutButton({ children, ...props }: SignOutButtonProps) {
   }
 
   return (
-    <Button className="glass" type="button" onClick={handleSignOut} {...props}>
+    <Button className="liquid-glass" type="button" onClick={handleSignOut} {...props}>
       {children}
     </Button>
   );

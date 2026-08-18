@@ -75,7 +75,7 @@ export function HabitFormDialog({
   const selectedColor = form.watch("color");
 
   return (
-    <LiquidGlassSurface >
+    <div className="liquid-glass-parent">
         <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent>
           <DialogHeader>
@@ -87,8 +87,8 @@ export function HabitFormDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4  flex flex-col gap-1">
+            <div className="space-y-2 flex flex-col gap-1">
               <Label htmlFor="name">Nom</Label>
               <Input
                 id="name"
@@ -97,7 +97,7 @@ export function HabitFormDialog({
                 aria-invalid={!!form.formState.errors.name}
                 aria-describedby="name-error"
                 disabled={isSubmitting}
-                className="glass"
+                className="liquid-glass"
               />
               {form.formState.errors.name && (
                 <p className="text-sm text-destructive" role="alert">
@@ -106,7 +106,7 @@ export function HabitFormDialog({
               )}
             </div>
 
-            <fieldset className="space-y-2">
+            <fieldset className="space-y-2 ">
               <legend className="text-sm font-medium">Couleur</legend>
               <div className="flex flex-wrap gap-2">
                 {HABIT_COLORS.map((color) => (
@@ -134,17 +134,17 @@ export function HabitFormDialog({
             </fieldset>
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="glass">
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="liquid-glass">
                 Annuler
               </Button>
-              <Button type="submit" disabled={isSubmitting} className="glass">
+              <Button type="submit" disabled={isSubmitting} className="liquid-glass">
                 {isSubmitting ? "Enregistrement…" : isEditing ? "Enregistrer" : "Créer"}
               </Button>
             </DialogFooter>
           </form>
         </DialogContent>
       </Dialog>
-    </LiquidGlassSurface>
+    </div>
     
     
   );
