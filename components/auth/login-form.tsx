@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PhysicalGlassButton } from "../ui/PhysicalGlassButton.tsx";
+import { usePhysicalGlass } from "../../app/hook/usePhysicalGlass.ts";
 
 const oauthProviders = [
   { provider: "google", label: "Google", icon: "/google.svg" },
@@ -23,6 +25,8 @@ export function LoginForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const submitGlass = usePhysicalGlass();
+  
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
@@ -79,6 +83,8 @@ export function LoginForm() {
               className="liquid-glass flex items-center justify-center gap-2"
               onClick={() => handleOAuthLogin(provider)}
               autoFocus
+              baseFrequency="0.02 0.03"
+              scale="5"
             >
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted text-xs font-bold">
                 {icon && (
@@ -142,9 +148,28 @@ export function LoginForm() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Button type="submit" className="liquid-glass w-full sm:max-w-7/12 items-center justify-center" disabled={isSubmitting}>
+            {/* <Button 
+              type="submit" 
+              className="liquid-glass physical-glass w-full sm:max-w-7/12 items-center justify-center" 
+              disabled={isSubmitting}
+              baseFrequency="0.02 0.03"
+              scale="5"
+              >
               {isSubmitting ? "Connexion…" : "Se connecter"}
-            </Button>
+            </Button> */}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              onPointerEnter={submitGlass.onPointerEnter}
+              onPointerLeave={submitGlass.onPointerLeave}
+              onPointerDown={submitGlass.onPointerDown}
+              onPointerUp={submitGlass.onPointerUp}
+              className={submitGlass.getClass(
+                "liquid-glass w-full sm:max-w-7/12 items-center justify-center"
+              )}
+              >
+                {isSubmitting ? "Connexion…" : "Se connecter"}
+              </Button>
           </div>
         </form>
 

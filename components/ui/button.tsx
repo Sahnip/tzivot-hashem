@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils.ts";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ring-offset-background",
@@ -43,6 +43,37 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
+        data-size={size}
+        data-variant={variant}
+        data-state={props.disabled ? "disabled" : "enabled"}
+        data-pressed={props.disabled ? "false" : "true"}
+        data-hover={props.disabled ? "false" : "true"}
+        data-focus={props.disabled ? "false" : "true"}
+        data-active={props.disabled ? "false" : "true"}
+        data-interactive={props.disabled ? "false" : "true"}
+        data-loading={props.disabled ? "false" : "true"}
+        data-open={props.disabled ? "false" : "true"}
+        data-checked={props.disabled ? "false" : "true"}
+        data-expanded={props.disabled ? "false" : "true"}
+        data-value={props.disabled ? "false" : "true"}
+        data-multiple={props.disabled ? "false" : "true"}
+        data-pressed-multiple={props.disabled ? "false" : "true"}
+        data-selected={props.disabled ? "false" : "true"}
+        data-default={props.disabled ? "false" : "true"}
+        data-checked-multiple={props.disabled ? "false" : "true"}
+        data-value-multiple={props.disabled ? "false" : "true"}
+        data-pressed-value={props.disabled ? "false" : "true"}
+        data-pressed-checked={props.disabled ? "false" : "true"}
+        data-pressed-selected={props.disabled ? "false" : "true"}
+        data-pressed-default={props.disabled ? "false" : "true"}
+        data-pressed-expanded={props.disabled ? "false" : "true"}
+        data-pressed-open={props.disabled ? "false" : "true"}
+        data-pressed-loading={props.disabled ? "false" : "true"}
+        data-pressed-interactive={props.disabled ? "false" : "true"}
+        data-pressed-active={props.disabled ? "false" : "true"}
+        data-pressed-focus={props.disabled ? "false" : "true"}
+        data-pressed-hover={props.disabled ? "false" : "true"}
+        
       />
     );
   }

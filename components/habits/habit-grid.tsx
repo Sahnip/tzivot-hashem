@@ -11,8 +11,9 @@ import {
 } from "@/lib/dates/habit-calendar";
 import { getNextStatus, getStatusLabel } from "@/types/habit";
 import type { HabitEntryStatus } from "@/types/database";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils.ts";
 import { Spinner } from "@/components/ui/spinner";
+import { PhysicalGlassButton } from "../ui/PhysicalGlassButton.tsx";
 
 interface HabitGridProps {
   habitId: string;
@@ -204,3 +205,27 @@ export function HabitGrid({ habitId, year, timezone, initialEntries }: HabitGrid
     </div>
   );
 }
+
+
+
+
+
+
+
+{/* 
+  Exemple d'application de Hook PhysicalGlassButton pour les cellules de la grille, mais cela peut être plus lourd à rendre et moins performant que le simple bouton avec effet de verre liquide.
+    <PhysicalGlassButton
+    key={date}
+    type="button"
+    disabled={isFuture || isPending}
+    onClick={() => handleToggle(date)}
+    className={cn(
+      "glass-cell h-3 w-3 min-h-3 min-w-3 rounded-[3px] border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 cursor-pointer",
+      getCellClasses(status, isFuture),
+      isPending && "opacity-70"
+    )}
+    // Tu peux passer title / aria-* si besoin via des props supplémentaires du wrapper
+  >
+    {isPending && <span className="sr-only">Enregistrement en cours</span>}
+  </PhysicalGlassButton> 
+  */}

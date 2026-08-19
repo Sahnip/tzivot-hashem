@@ -26,7 +26,9 @@ export function AppHeader() {
             <Link
               href="/dashboard"
               // className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-              className="liquid-glass
+              className="
+                  liquid-glass
+                  physical-glass
                   h-11
                   w-full
                   px-4

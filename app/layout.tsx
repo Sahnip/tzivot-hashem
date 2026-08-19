@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
-import { QueryProvider } from "@/components/query-provider";
-import { ThemeProvider } from "@/components/theme-provider";
+import { QueryProvider } from "../components/query-provider.tsx";
+import { ThemeProvider } from "../components/theme-provider.tsx";
 import "./globals.css";
+import { LiquidDistortionDefs } from "../components/ui/LiquidDistortionDefs.tsx";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <QueryProvider>
+            <LiquidDistortionDefs />
             {children}
             <Toaster richColors position="top-center" />
           </QueryProvider>
@@ -46,28 +48,32 @@ export default function RootLayout({
   );
 }
 
+
+
+
+
 // Dans ton layout ou ton App, rendu une seule fois
-export function GlassFilters() {
-  return (
-    <svg width="0" height="0" className="absolute">
-      <defs>
-        {/* Filtre de distorsion “liquide” */}
-        <filter id="liquid-distortion">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.6"
-            numOctaves="2"
-            result="noise"
-          />
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="noise"
-            scale="4"
-            xChannelSelector="R"
-            yChannelSelector="G"
-          />
-        </filter>
-      </defs>
-    </svg>
-  );
-}
+// export function GlassFilters() {
+//   return (
+//     <svg width="0" height="0" className="absolute">
+//       <defs>
+//         {/* Filtre de distorsion “liquide” */}
+//         <filter id="liquid-distortion">
+//           <feTurbulence
+//             type="fractalNoise"
+//             baseFrequency="0.6"
+//             numOctaves="2"
+//             result="noise"
+//           />
+//           <feDisplacementMap
+//             in="SourceGraphic"
+//             in2="noise"
+//             scale="4"
+//             xChannelSelector="R"
+//             yChannelSelector="G"
+//           />
+//         </filter>
+//       </defs>
+//     </svg>
+//   );
+// }

@@ -327,13 +327,29 @@ body {
       rgba(255, 255, 255, 0.055) 48%,
       rgba(255, 255, 255, 0.12)
     );
+    background-image:
+      linear-gradient(
+        135deg,
+        hsla(0, 0%, 100%, 0.06) 0%,
+        hsla(0, 0%, 100%, 0.02) 100%
+      ),
+      url("/public/glass-noise.png");
+
+  background-repeat: no-repeat, repeat;
+  background-size: auto, 180px 180px;
+  background-blend-mode: normal, soft-light;
+
+  /* -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%); */
 
   -webkit-backdrop-filter:
+    url("#liquid-distortion")
     blur(var(--liquid-blur))
     saturate(var(--liquid-saturation))
     brightness(1.04);
 
   backdrop-filter:
+    url("#liquid-distortion")
     blur(var(--liquid-blur))
     saturate(var(--liquid-saturation))
     brightness(1.04);
@@ -357,15 +373,15 @@ body {
  * Le support de backdrop-filter:url() varie selon les navigateurs.
  * Le blur CSS reste donc le fallback principal.
  */
-@supports (backdrop-filter: url("#liquid-glass-refraction")) {
+@supports (backdrop-filter: url("#liquid-distortion")) {
   .liquid-glass {
     -webkit-backdrop-filter:
-      url("#liquid-glass-refraction")
+      url("#liquid-distortion")
       blur(var(--liquid-blur))
       saturate(var(--liquid-saturation));
 
     backdrop-filter:
-      url("#liquid-glass-refraction")
+      url("#liquid-distortion")
       blur(var(--liquid-blur))
       saturate(var(--liquid-saturation));
   }
@@ -482,10 +498,10 @@ body {
 }
 
 /* Focus accessible sans imposer de curseur */
-.liquid-glass:focus-visible {
+/* .liquid-glass:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.8);
   outline-offset: 3px;
-}
+} */
 
 /* État désactivé */
 .liquid-glass:disabled,
@@ -519,6 +535,18 @@ body {
     hsla(0, 0%, 100%, 0.06) 0%,
     hsla(0, 0%, 100%, 0.02) 100%
   );
+
+  background-image:
+    linear-gradient(
+      135deg,
+      hsla(0, 0%, 100%, 0.06) 0%,
+      hsla(0, 0%, 100%, 0.02) 100%
+    ),
+    url("/public/glass-noise.png"); /* image de bruit très subtile en repeat */
+
+  background-repeat: no-repeat, repeat;
+  background-size: auto, 180px 180px;
+  background-blend-mode: normal, soft-light;
 
   backdrop-filter: blur(var(--blur-glass));
   -webkit-backdrop-filter: blur(var(--blur-glass));
@@ -580,6 +608,8 @@ body {
     transform 450ms cubic-bezier(0.2, 0.8, 0.2, 1),
     opacity 350ms ease;
   mix-blend-mode: screen;
+
+  filter: url("#liquid-distortion") blur(8px);
 }
 
 .glass:hover {
@@ -605,10 +635,10 @@ body {
   opacity: 1;
 }
 
-.glass:focus-visible {
+/* .glass:focus-visible {
   outline: 2px solid hsla(0, 0%, 100%, 0.6);
   outline-offset: 2px;
-}
+} */
 
 /* Navigation “glass” */
 .glass-nav {
@@ -773,7 +803,7 @@ body {
       hsla(0, 0%, 100%, 0.06) 0%,
       hsla(0, 0%, 100%, 0.02) 100%
     ),
-    url("/textures/glass-noise.png"); /* image de bruit très subtile en repeat */
+    url("/public/glass-noise.png"); /* image de bruit très subtile en repeat */
     background-blend-mode: normal, overlay;
 }
 
@@ -807,7 +837,7 @@ body {
 
 
   filter: blur(10px);
-  filter: blur(10px) url(#liquid-distortion); /* ajoute la distorsion */
+  filter: blur(10px) url("#liquid-distortion"); /* ajoute la distorsion */
 }
 
 .liquid-glass-surface:hover::after {
@@ -929,11 +959,227 @@ body {
 }
 
 /* Focus visible */
-.glass-cell:focus-visible {
+/* .glass-cell:focus-visible {
   outline: 2px solid hsla(0, 0%, 100%, 0.7);
   outline-offset: 2px;
+} */
+
+
+
+
+/* ------------------------------------------ */
+/* Effets physiques : squeeze (hover) + press (clic) */
+/* ------------------------------------------ */
+
+/* Classe à appliquer sur les éléments interactifs (boutons, cells, etc.) */
+.physical-glass {
+  position: relative;
+  overflow: hidden;
+
+  isolation: isolate;
+  overflow: hidden;
+
+  /*
+   * Ne pas définir :
+   * width, height, min-width, min-height,
+   * padding, border-radius, transform ou clip-path.
+   *
+   * Tailwind garde donc entièrement le contrôle.
+   */
+  transform: none;
+
+  /* Animation de déformation */
+  transition:
+    transform 180ms cubic-bezier(0.2, 0.6, 0.2, 1),
+    border-radius 180ms cubic-bezier(0.2, 0.6, 0.2, 1),
+    box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 180ms ease,
+    border-color 180ms ease;
+
+  /* Par défaut */
+  transform: scale(1);
 }
 
+/* Couche interne : sensation de matière qui se resserre */
+.physical-glass::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
 
+  pointer-events: none;
+  border-radius: inherit;
 
+  background:
+    radial-gradient(
+      115% 85% at 50% -20%,
+      rgba(255, 255, 255, 0.42),
+      rgba(255, 255, 255, 0.08) 44%,
+      transparent 72%
+    );
 
+  opacity: 0;
+  transform: scale(1.08);
+
+  transition:
+    opacity 340ms ease,
+    transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Reflet mobile qui donne le mouvement liquide */
+.physical-glass::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -65%;
+
+  pointer-events: none;
+  border-radius: 50%;
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(255, 255, 255, 0.1) 28%,
+    transparent 68%
+  );
+
+  opacity: 0;
+  transform: translate3d(-14%, -12%, 0) scale(0.58);
+
+  filter: blur(10px);
+  mix-blend-mode: screen;
+
+  transition:
+    opacity 280ms ease,
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover : resserrement des bords (squeeze) */
+.physical-glass.hover-squeeze {
+  transform: scale(0.96);
+  /* border-radius: calc(var(--radius-base, 0.5rem) * 0.9); */
+  
+  box-shadow:
+  inset 0 1px 2px rgba(255, 255, 255, 0.52),
+  inset 0 -2px 5px rgba(0, 0, 0, 0.22),
+  0 3px 10px rgba(0, 0, 0, 0.16);
+
+  filter: saturate(1.04) brightness(1.025);
+}
+
+.physical-glass.hover-squeeze::before {
+  opacity: 0.75;
+  transform: scale(0.96);
+}
+
+.physical-glass.hover-squeeze::after {
+  opacity: 0.78;
+  transform: translate3d(8%, 6%, 0) scale(1);
+}
+
+/* Press : effet d’enfoncement (goutte qui s’appuie) */
+.physical-glass.pressed {
+  transform: scale(0.92);
+  border-radius: calc(var(--radius-base, 0.5rem) * 0.8);
+  box-shadow:
+  inset 0 3px 7px rgba(0, 0, 0, 0.3),
+  inset 0 1px 1px rgba(255, 255, 255, 0.24),
+  0 1px 3px rgba(0, 0, 0, 0.13);
+
+  filter: brightness(0.96) saturate(1.06);
+
+  transition-duration: 100ms;
+}
+
+.physical-glass.pressed::before {
+  opacity: 0.92;
+  transform: scale(0.9);
+}
+
+.physical-glass.pressed::after {
+  opacity: 0.94;
+  transform: translate3d(0, 8%, 0) scale(1.18);
+  transition-duration: 100ms;
+}
+
+/*
+ * Relâchement :
+ * la matière interne rebondit très peu.
+ * Le contour, la taille et le radius ne changent jamais.
+ */
+@keyframes squishy-glass-release {
+  0% {
+    filter: brightness(0.96) saturate(1.06);
+  }
+
+  45% {
+    filter: brightness(1.04) saturate(1.03);
+  }
+
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+}
+
+@keyframes squishy-glass-inner-release {
+  0% {
+    transform: scale(0.9);
+  }
+
+  55% {
+    transform: scale(1.025);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Animation de retour au relâché (rebond très subtil) */
+@keyframes glass-release {
+  0% {
+    transform: scale(0.92);
+  }
+  40% {
+    transform: scale(0.98);
+  }
+  70% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.physical-glass.releasing {
+  animation: squishy-glass-release 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.physical-glass.releasing::before {
+  animation: squishy-glass-inner-release 320ms
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*
+ * Il faut placer le contenu au-dessus des pseudo-éléments.
+ * Les éléments déjà positionnés conservent leur propre z-index.
+ */
+.physical-glass > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Accessibilité : pas d'animation forte si l'utilisateur le demande. */
+@media (prefers-reduced-motion: reduce) {
+  .physical-glass,
+  .physical-glass::before,
+  .physical-glass::after {
+    transition-duration: 1ms;
+    animation-duration: 1ms;
+  }
+}
+
+/* Si tu veux combiner avec ton existing .glass / .glass-cell,
+   assure-toi juste que .physical-glass est déclaré après pour prioriser les transitions */
