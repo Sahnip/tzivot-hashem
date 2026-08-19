@@ -92,22 +92,30 @@ export function ProfileForm({ profile, email }: ProfileFormProps) {
         </CardHeader>
         <CardContent>
           <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col gap-1 ">
               <Label htmlFor="email">Adresse e-mail</Label>
-              <Input id="email" value={email} disabled readOnly />
+              <Input 
+                id="email" 
+                value={email} 
+                disabled readOnly 
+                className="liquid-glass"
+              />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col gap-1">
               <Label htmlFor="displayName">Nom d&apos;affichage</Label>
-              <Input id="displayName" {...profileForm.register("displayName")} />
+              <Input 
+                id="displayName" {...profileForm.register("displayName")} 
+                className="liquid-glass"
+              />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col gap-1">
               <Label htmlFor="timezone">Fuseau horaire</Label>
               <select
                 id="timezone"
                 {...profileForm.register("timezone")}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="liquid-glass flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {TIMEZONES.map((tz) => (
                   <option key={tz} value={tz}>
@@ -117,7 +125,7 @@ export function ProfileForm({ profile, email }: ProfileFormProps) {
               </select>
             </div>
 
-            <Button type="submit" disabled={isProfileSubmitting}>
+            <Button type="submit" disabled={isProfileSubmitting} className="liquid-glass mt-6">
               {isProfileSubmitting ? "Enregistrement…" : "Enregistrer le profil"}
             </Button>
           </form>
@@ -131,13 +139,14 @@ export function ProfileForm({ profile, email }: ProfileFormProps) {
         </CardHeader>
         <CardContent>
           <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col gap-1">
               <Label htmlFor="currentPassword">Mot de passe actuel</Label>
               <Input
                 id="currentPassword"
                 type="password"
                 autoComplete="current-password"
                 {...passwordForm.register("currentPassword")}
+                className="liquid-glass"
               />
               {passwordForm.formState.errors.currentPassword && (
                 <p className="text-sm text-destructive" role="alert">
@@ -146,13 +155,14 @@ export function ProfileForm({ profile, email }: ProfileFormProps) {
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col gap-1">
               <Label htmlFor="newPassword">Nouveau mot de passe</Label>
               <Input
                 id="newPassword"
                 type="password"
                 autoComplete="new-password"
                 {...passwordForm.register("newPassword")}
+                className="liquid-glass"
               />
               {passwordForm.formState.errors.newPassword && (
                 <p className="text-sm text-destructive" role="alert">
@@ -161,13 +171,14 @@ export function ProfileForm({ profile, email }: ProfileFormProps) {
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col gap-1">
               <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
               <Input
                 id="confirmPassword"
                 type="password"
                 autoComplete="new-password"
                 {...passwordForm.register("confirmPassword")}
+                className="liquid-glass"
               />
               {passwordForm.formState.errors.confirmPassword && (
                 <p className="text-sm text-destructive" role="alert">
@@ -176,7 +187,7 @@ export function ProfileForm({ profile, email }: ProfileFormProps) {
               )}
             </div>
 
-            <Button type="submit" disabled={isPasswordSubmitting}>
+            <Button type="submit" disabled={isPasswordSubmitting} className="liquid-glass mt-6">
               {isPasswordSubmitting ? "Mise à jour…" : "Mettre à jour le mot de passe"}
             </Button>
           </form>
@@ -189,7 +200,7 @@ export function ProfileForm({ profile, email }: ProfileFormProps) {
           <CardDescription>Fermez votre session sur cet appareil.</CardDescription>
         </CardHeader>
         <CardContent>
-          <SignOutButton variant="outline">
+          <SignOutButton variant="outline" className="liquid-glass">
             <LogOut className="h-4 w-4" aria-hidden="true" />
             Se déconnecter
           </SignOutButton>

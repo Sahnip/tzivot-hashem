@@ -141,9 +141,11 @@ export function LoginForm() {
             </Link>
           </div>
 
-          <Button type="submit" className="liquid-glass  items-center justify-center" disabled={isSubmitting}>
-            {isSubmitting ? "Connexion…" : "Se connecter"}
-          </Button>
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <Button type="submit" className="liquid-glass w-full sm:max-w-7/12 items-center justify-center" disabled={isSubmitting}>
+              {isSubmitting ? "Connexion…" : "Se connecter"}
+            </Button>
+          </div>
         </form>
 
         <p className="mt-4 text-center text-sm text-muted-foreground">

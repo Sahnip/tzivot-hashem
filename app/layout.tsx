@@ -45,3 +45,29 @@ export default function RootLayout({
     </html>
   );
 }
+
+// Dans ton layout ou ton App, rendu une seule fois
+export function GlassFilters() {
+  return (
+    <svg width="0" height="0" className="absolute">
+      <defs>
+        {/* Filtre de distorsion “liquide” */}
+        <filter id="liquid-distortion">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.6"
+            numOctaves="2"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="4"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
+    </svg>
+  );
+}

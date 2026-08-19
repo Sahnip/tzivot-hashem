@@ -63,8 +63,8 @@ export default function ForgotPasswordPage() {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
+            <form onSubmit={handleSubmit} className="space-y-4 ">
+              <div className="space-y-2 flex flex-col gap-1">
                 <Label htmlFor="email">Adresse e-mail</Label>
                 <Input
                   id="email"
@@ -73,16 +73,22 @@ export default function ForgotPasswordPage() {
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="vous@example.com"
                   autoComplete="email"
+                  className="liquid-glass"
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <div className="text-xs font- font-light text-muted-foreground m-2 mb-12">
+                Après avoir cliqué sur le bouton ci-dessous, vous recevrez un e-mail contenant un lien sécurisé pour réinitialiser votre mot de passe.
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <Button type="submit" className="liquid-glass w-full sm:max-w-4/6" disabled={isSubmitting}>
                 {isSubmitting ? "Envoi…" : "Envoyer le lien de sécurité"}
               </Button>
 
-              <Button asChild variant="ghost" className="w-full">
+              <Button asChild variant="ghost" className="liquid-glass sm:max-w-4/6">
                 <Link href="/login">Annuler</Link>
               </Button>
+            </div>
             </form>
           )}
         </CardContent>

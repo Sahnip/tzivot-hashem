@@ -60,17 +60,17 @@ export default function ResetPasswordPage() {
         </CardHeader>
         <CardContent>
           {done ? (
-            <div className="space-y-4">
+            <div className="space-y-4 flex flex-col gap-1">
               <div className="rounded-md border border-emerald-500/40 bg-emerald-500/10 p-4 text-sm text-emerald-900 dark:text-emerald-100">
                 Votre mot de passe a été mis à jour avec succès.
               </div>
-              <Button className="w-full" onClick={() => router.push("/login")}>
+              <Button className="liquid-glass w-full" onClick={() => router.push("/login")}>
                 Se connecter
               </Button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
+            <form onSubmit={handleSubmit} className="space-y-4 ">
+              <div className="space-y-2 flex flex-col gap-1">
                 <Label htmlFor="password">Nouveau mot de passe</Label>
                 <Input
                   id="password"
@@ -79,10 +79,11 @@ export default function ResetPasswordPage() {
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="••••••••"
                   autoComplete="new-password"
+                  className="liquid-glass"
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 flex flex-col gap-1">
                 <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
                 <Input
                   id="confirmPassword"
@@ -91,17 +92,22 @@ export default function ResetPasswordPage() {
                   onChange={(event) => setConfirmPassword(event.target.value)}
                   placeholder="••••••••"
                   autoComplete="new-password"
+                  className="liquid-glass"
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Mise à jour…" : "Mettre à jour le mot de passe"}
-              </Button>
+              <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+                <Button type="submit" className="liquid-glass w-full" disabled={isSubmitting}>
+                  {isSubmitting ? "Mise à jour…" : "Mettre à jour le mot de passe"}
+                </Button>
 
-              <Button asChild variant="ghost" className="w-full">
-                <Link href="/login">Annuler</Link>
-              </Button>
+                <Button asChild variant="ghost" className="liquid-glass w-full">
+                  <Link href="/login">Annuler</Link>
+                </Button>
+              </div>
+
             </form>
+            
           )}
         </CardContent>
       </Card>

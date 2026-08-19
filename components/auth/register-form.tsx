@@ -206,10 +206,11 @@ export function RegisterForm() {
               </p>
             )}
           </div>
-
-          <Button type="submit" className="liquid-glass " disabled={isSubmitting}>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <Button type="submit" className="liquid-glass w-full sm:max-w-7/12" disabled={isSubmitting}>
             {isSubmitting ? "Création…" : "Créer mon compte"}
           </Button>
+        </div>
         </form>
 
         <p className="mt-4 text-center text-sm text-muted-foreground">
@@ -218,6 +219,7 @@ export function RegisterForm() {
             Se connecter
           </Link>
         </p>
+        
       </CardContent>
     </Card>
   );

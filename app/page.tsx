@@ -19,10 +19,10 @@ export default async function HomePage() {
           sécurisée.
         </p>
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Button asChild size="lg" className="liquid-glass">
+          <Button asChild size="lg" className="liquid-glass w-full sm:max-w-4/6">
             <Link href="/register">Commencer gratuitement</Link>
           </Button>
-          <Button asChild variant="outline" size="lg" className="liquid-glass">
+          <Button asChild variant="outline" size="lg" className="liquid-glass sm:max-w-4/6">
             <Link href="/login">Se connecter</Link>
           </Button>
         </div>

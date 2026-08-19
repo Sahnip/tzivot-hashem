@@ -85,10 +85,10 @@ export default function EmailConfirmationPage() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className="liquid-glass">
               <Link href="/login">Retour à la connexion</Link>
             </Button>
-            <Button asChild>
+            <Button asChild className="liquid-glass">
               <Link href="/register">Créer un autre compte</Link>
             </Button>
           </div>
