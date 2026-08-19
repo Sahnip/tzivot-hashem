@@ -95,7 +95,7 @@ npm run build       # Build production
 2. Importez le projet dans [Vercel](https://vercel.com)
 3. Ajoutez les variables d'environnement :
    - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 4. Déployez
 
 Dans Supabase → Authentication → URL Configuration, ajoutez :
