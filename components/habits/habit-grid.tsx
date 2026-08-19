@@ -11,9 +11,9 @@ import {
 } from "@/lib/dates/habit-calendar";
 import { getNextStatus, getStatusLabel } from "@/types/habit";
 import type { HabitEntryStatus } from "@/types/database";
-import { cn } from "../../lib/utils.ts";
+import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
-import { PhysicalGlassButton } from "../ui/PhysicalGlassButton.tsx";
+import { PhysicalGlassButton } from "../ui/PhysicalGlassButton";
 
 interface HabitGridProps {
   habitId: string;

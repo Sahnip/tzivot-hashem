@@ -12,8 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PhysicalGlassButton } from "../ui/PhysicalGlassButton.tsx";
-import { usePhysicalGlass } from "../../app/hook/usePhysicalGlass.ts";
+import { PhysicalGlassButton } from "../ui/PhysicalGlassButton";
+import { usePhysicalGlass } from "../../app/hook/usePhysicalGlass";
 
 const oauthProviders = [
   { provider: "google", label: "Google", icon: "/google.svg" },
@@ -83,8 +83,7 @@ export function LoginForm() {
               className="liquid-glass flex items-center justify-center gap-2"
               onClick={() => handleOAuthLogin(provider)}
               autoFocus
-              baseFrequency="0.02 0.03"
-              scale="5"
+              
             >
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted text-xs font-bold">
                 {icon && (
@@ -152,8 +151,7 @@ export function LoginForm() {
               type="submit" 
               className="liquid-glass physical-glass w-full sm:max-w-7/12 items-center justify-center" 
               disabled={isSubmitting}
-              baseFrequency="0.02 0.03"
-              scale="5"
+              
               >
               {isSubmitting ? "Connexion…" : "Se connecter"}
             </Button> */}

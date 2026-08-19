@@ -20,7 +20,6 @@ export function LiquidGlassDefs() {
         >
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.025 0.04"
             numOctaves="2"
             seed="18"
             result="noise"

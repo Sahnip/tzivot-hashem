@@ -124,7 +124,7 @@
 
 
 import * as React from "react";
-import { cn } from "../../lib/utils.ts";
+import { cn } from "@/lib/utils";
 import { LiquidGlassSurface } from "../ui/LiquidGlassSurface";
 
 // interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}

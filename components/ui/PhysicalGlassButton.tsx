@@ -2,8 +2,8 @@
 "use client";
 
 import { ReactNode, MouseEventHandler } from "react";
-import { usePhysicalGlass } from "../../app/hook/usePhysicalGlass.ts";
-import { cn } from "../../lib/utils.ts"; // ou ton utilitaire de fusion de classes
+import { usePhysicalGlass } from "../../app/hook/usePhysicalGlass";
+import { cn } from "@/lib/utils"; // ou ton utilitaire de fusion de classes
 
 type PhysicalGlassButtonProps = {
   children: ReactNode;
