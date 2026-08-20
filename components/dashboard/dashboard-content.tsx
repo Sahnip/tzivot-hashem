@@ -791,6 +791,8 @@ export function DashboardContent({
                       handleBulkDelete
                     }
                     className="
+                      liquid-glass
+                      physical-glass
                       h-10
                       w-full
                       sm:w-auto

@@ -46,6 +46,7 @@ export function LoginForm() {
     }
   }
 
+
   async function onSubmit(values: LoginInput) {
     setIsSubmitting(true);
     const supabase = createClient();
@@ -54,18 +55,33 @@ export function LoginForm() {
       email: values.email,
       password: values.password,
     });
-
+    
     setIsSubmitting(false);
 
     if (error) {
       toast.error("E-mail ou mot de passe incorrect.");
       return;
     }
-
     toast.success("Connexion réussie");
     router.push("/dashboard");
-    router.refresh();
+    // router.refresh();
   }
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  const handleLogin = (e: React.FormEvent, values: LoginInput) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      onSubmit(values);
+      // toast.success("Connexion réussie");
+      // router.push("/dashboard");
+    })
+  };
 
   return (
     <Card className="w-full max-w-md">
@@ -101,7 +117,7 @@ export function LoginForm() {
           <div className="h-px flex-1 bg-border" />
         </div>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={(e) => (handleLogin(e,  form.getValues()))} className="space-y-4">
           <div className="space-y-2 flex flex-col gap-1">
             <Label htmlFor="email">Adresse e-mail</Label>
             <Input
