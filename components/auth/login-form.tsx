@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@supabase/supabase-js";
+// import { createClient } from "@/lib/supabase/client";
 import { loginSchema, type LoginInput } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,11 +34,12 @@ export function LoginForm() {
   });
 
   async function handleOAuthLogin(provider: (typeof oauthProviders)[number]["provider"]) {
-    const supabase = createClient();
+    const supabase = createClient('https://zahnipxgetpltctuuvgp.supabase.co', process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '');
     const { error } = await supabase.auth.signInWithOAuth({
-      provider,
+      provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=%2Fdashboard`,
+        // redirectTo: `${window.location.origin}/auth/callback?next=%2Fdashboard`,
+        redirectTo: `${window.location.origin}/auth/callback?next=%2Femail-checked`,
       },
     });
 

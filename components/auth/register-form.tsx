@@ -35,11 +35,12 @@ export function RegisterForm() {
   });
 
   async function handleOAuthLogin(provider: (typeof oauthProviders)[number]["provider"]) {
-    const supabase = createClient();
+    const supabase = createClient('https://zahnipxgetpltctuuvgp.supabase.co', process.env.SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET || '');
     const { error } = await supabase.auth.signInWithOAuth({
-      provider,
+      provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=%2Fdashboard`,
+        // redirectTo: `${window.location.origin}/auth/callback?next=%2Fdashboard`,
+        redirectTo: `${window.location.origin}/auth/callback?next=%2Femail-checked`,
       },
     });
 
