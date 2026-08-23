@@ -57,6 +57,7 @@ export function RegisterForm() {
       email: values.email,
       password: values.password,
       options: {
+        emailRedirectTo: 'https://machiahnow.fr/email-checked',
         data: {
           display_name: values.displayName || undefined,
         },

@@ -172,7 +172,7 @@ export function LoginForm() {
               {isSubmitting ? "Connexion…" : "Se connecter"}
             </Button> */}
             <Button
-              type="submit"
+              type="submit"         
               disabled={isSubmitting}
               onPointerEnter={submitGlass.onPointerEnter}
               onPointerLeave={submitGlass.onPointerLeave}
