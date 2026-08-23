@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { createClient } from "@supabase/supabase-js";
-// import { createClient } from "@/lib/supabase/client";
+// import { createClient } from "@supabase/supabase-js";
 import { loginSchema, type LoginInput } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,7 +51,9 @@ export function LoginForm() {
 
   async function onSubmit(values: LoginInput) {
     setIsSubmitting(true);
-    const supabase = createClient();
+    // const supabase = createClient();
+    const supabase = createClient('https://zahnipxgetpltctuuvgp.supabase.co', process.env.SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET || '');
+   
 
     const { error } = await supabase.auth.signInWithPassword({
       email: values.email,

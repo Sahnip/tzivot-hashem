@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@supabase/supabase-js";
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,7 +52,13 @@ export function RegisterForm() {
   async function onSubmit(values: RegisterInput) {
     setIsSubmitting(true);
     setExistingAccount(false);
-    const supabase = createClient();
+    const supabase = createClient('https://zahnipxgetpltctuuvgp.supabase.co', process.env.SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET || '');
+
+    if (values.password !== values.confirmPassword) {
+      toast.error("Les mots de passe ne correspondent pas.");
+      setIsSubmitting(false);
+      return;
+    }
 
     const { data, error } = await supabase.auth.signUp({
       email: values.email,
