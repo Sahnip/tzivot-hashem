@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 
 export default function ResetPasswordPage() {
@@ -36,7 +36,7 @@ export default function ResetPasswordPage() {
     }
 
     setIsSubmitting(true);
-const supabase = createClient('https://zahnipxgetpltctuuvgp.supabase.co', process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '');
+const supabase = createClient();
 
     const { error } = await supabase.auth.updateUser({ password });
     setIsSubmitting(false);

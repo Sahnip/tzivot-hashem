@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-// import { createClient } from "@supabase/supabase-js";
-import { createClient } from "@supabase/supabase-js";
+// import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 
 export default function AuthCallbackPage() {
   const router = useRouter();
@@ -11,7 +11,7 @@ export default function AuthCallbackPage() {
 
   useEffect(() => {
     const next = searchParams.get("next") ?? "/dashboard";
-    const supabase = createClient('https://zahnipxgetpltctuuvgp.supabase.co', process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '');
+    const supabase = createClient();
 
     async function finalizeAuth() {
       const { data, error } = await supabase.auth.getSession();
@@ -52,7 +52,7 @@ export async function GET(request: Request) {
   }
 
   if (code) {
-const supabase = createClient('https://zahnipxgetpltctuuvgp.supabase.co', process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '');
+const supabase = createClient();
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
