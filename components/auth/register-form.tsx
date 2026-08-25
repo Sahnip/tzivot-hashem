@@ -39,8 +39,8 @@ export function RegisterForm() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        // redirectTo: `${window.location.origin}/auth/callback?next=%2Fdashboard`,
-        redirectTo: `${window.location.origin}/auth/callback?next=%2Femail-checked`,
+        redirectTo: `${window.location.origin}/auth/callback?next=%2Fdashboard`,
+        // redirectTo: `${window.location.origin}/auth/callback?next=%2Femail-checked`,
       },
     });
 
